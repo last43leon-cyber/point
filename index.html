@@ -105,7 +105,7 @@ openAudioDB().then(x=>{db=x;renderAudioShelf()}).catch(()=>document.getElementBy
  // Export user-owned library ZIP, using ZIP engine loaded by existing backup action.
  document.getElementById('backupSettings').onclick=()=>document.getElementById('exportAudio').click();
  // Backup ZIP restore uses the existing ZIP importer.
- document.getElementById('backupImport').onchange=e=>{const files=e.target.files;if(files?.length){const input=document.getElementById('zipFiles');input.files=files;input.dispatchEvent(new Event('change'))}e.target.value=''};
+ document.getElementById('backupImport').onchange=e=>{const files=e.target.files;if(files?.length){const input=document.getElementById('zipFiles');const transfer=new DataTransfer();[...files].forEach(file=>transfer.items.add(file));input.files=transfer.files;input.dispatchEvent(new Event('change'))}e.target.value=''};
  // expose playback from card audio; route into dock when media is played.
  document.getElementById('audioShelf').addEventListener('play',e=>{if(e.target.tagName==='AUDIO'){dock.src=e.target.src;dockTitle.textContent='تشغيل من الخزنة';}},true);
  window.addEventListener('storage',()=>{favorites=getJSON(keyFav,[]);history=getJSON(keyHist,[])});
