@@ -1,79 +1,34 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101218"><title>صَدى — مكتبة أصوات الشخصيات</title>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101218"><title>صَدى | ردود شخصياتك</title>
 <style>
-:root{--bg:#101218;--card:#1b1e24;--soft:#242832;--line:#333945;--text:#f3f4f6;--muted:#aeb5c0;--accent:#d5ae69}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,"Segoe UI",sans-serif}
-header{max-width:1150px;margin:auto;padding:24px 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border:1px solid var(--accent);border-radius:14px;display:grid;place-items:center;color:var(--accent);font-size:22px}h1{margin:0;font-size:22px}header p{margin:3px 0;color:var(--muted);font-size:12px}
-main{max-width:1150px;margin:auto;padding:0 18px 40px}
-.hero{padding:30px 25px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(125deg,#272b34,#171a20);margin-bottom:20px}
-.hero h2{margin:0 0 8px;font-size:clamp(24px,4vw,36px)}.hero p{margin:0;color:#c2c7d0;line-height:1.8;max-width:750px}
-.controls{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap}
-input,select{background:#101318;color:var(--text);border:1px solid var(--line);padding:12px 14px;border-radius:11px;font:inherit;min-width:0}#search{flex:1;min-width:190px}
-button{background:var(--soft);border:1px solid var(--line);color:var(--text);padding:10px 14px;border-radius:11px;font:inherit;cursor:pointer}button:hover,.link:hover{border-color:var(--accent);color:var(--accent)}.note{font-size:12px;color:var(--muted);margin:13px 0 0}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 12px;flex-wrap:wrap}.toolbar h3{margin:0}.toolbar small{color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px;min-width:0}
-.card h4{margin:0;font-size:17px}.game{font-size:12px;color:var(--muted);margin:5px 0 12px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tag{border:1px solid var(--line);color:#c6cbd4;border-radius:99px;padding:5px 9px;font-size:11px}
-.links{display:flex;flex-wrap:wrap;gap:7px}.link{display:inline-block;color:#e9d2a5;text-decoration:none;border:1px solid #665338;border-radius:9px;padding:8px 10px;font-size:12px}
-.feature{border-color:#6d5734;background:#26221c}.feature .link{background:#31291e}
-.empty{padding:25px;text-align:center;color:var(--muted);grid-column:1/-1}
-footer{max-width:1150px;margin:auto;padding:0 18px 28px;color:var(--muted);font-size:12px;line-height:1.8}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){header{padding-top:16px}.grid{grid-template-columns:1fr}.hero{padding:22px 18px}main{padding-inline:13px}header,footer{padding-inline:13px}}
+:root{--bg:#0b0d11;--panel:#141820;--panel2:#1b2230;--line:#293242;--txt:#f2f4f8;--muted:#9aa6b8;--gold:#d8b46a;--mint:#9ad5b5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b2432 0,#0b0d11 48%);color:var(--txt);font:16px system-ui,-apple-system,"Segoe UI",sans-serif}header{max-width:1200px;margin:auto;padding:20px;display:flex;justify-content:space-between;align-items:center}.brand{display:flex;gap:12px;align-items:center}.mark{width:46px;height:46px;border:1px solid var(--gold);border-radius:15px;display:grid;place-items:center;color:var(--gold);font-size:23px}h1{margin:0;font-size:24px}header small{color:var(--muted)}main{max-width:1200px;margin:auto;padding:0 18px 42px}.hero{border:1px solid var(--line);background:linear-gradient(130deg,#202b3b,#151922 70%);border-radius:25px;padding:25px;margin-bottom:18px}.hero h2{font-size:clamp(24px,4vw,38px);margin:0 0 8px}.hero p{color:#bac4d2;line-height:1.8;margin:0;max-width:750px}.filters{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}input,select{background:#0d1118;color:var(--txt);border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit}#q{flex:1;min-width:200px}button{cursor:pointer;background:#202938;color:var(--txt);border:1px solid var(--line);border-radius:11px;padding:10px 14px;font:inherit}button:hover{border-color:var(--gold)}.section{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 2px 12px}.section h3{margin:0}.muted{color:var(--muted);font-size:12px}.quick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}.chip{background:#151b24;border:1px solid #303b4d;border-radius:99px;padding:9px 13px;color:#d7dfeb;cursor:pointer}.chip.active,.chip:hover{border-color:var(--gold);color:var(--gold)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.card{border:1px solid var(--line);border-radius:18px;background:linear-gradient(150deg,#161b24,#11151c);padding:15px;min-width:0}.card h4{margin:0 0 6px;font-size:17px}.trigger{color:var(--muted);font-size:12px;margin-bottom:7px}.reply{font-size:20px;font-weight:700;color:var(--mint);margin:6px 0 12px}.who{display:flex;align-items:center;gap:9px;color:#c9d3e2;font-size:12px;margin:10px 0}.portrait{width:36px;height:36px;border-radius:11px;background:linear-gradient(140deg,#39475e,#202837);border:1px solid #44536b;display:grid;place-items:center;font-size:18px}.source{display:inline-block;text-decoration:none;color:#f1d49b;border:1px solid #5e4e31;border-radius:10px;padding:9px 12px;font-size:12px}.source:hover{background:#30291e}.empty{grid-column:1/-1;text-align:center;padding:24px;color:var(--muted)}footer{max-width:1200px;margin:auto;padding:0 18px 30px;color:var(--muted);font-size:12px;line-height:1.7}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr)}}@media(max-width:520px){.grid{grid-template-columns:1fr}main{padding-inline:12px}.hero{padding:20px}header{padding:15px}}
 </style></head><body>
-<header><div class="brand"><div class="logo">◈</div><div><h1>صَدى</h1><p>دليل أصوات الشخصيات — تسجيلات بشرية حقيقية</p></div></div><a class="link" href="https://github.com/last43leon-cyber/point" target="_blank" rel="noopener">المستودع</a></header>
-<main>
-<section class="hero"><h2>صوت الشخصية، من مصدره.</h2><p>ابحث عن شخصيات الألعاب والأفلام والمسلسلات. افتح أرشيفات التسجيلات الحقيقية أو صفحات الصوت المعروفة. لا توجد ملفات صوت مولّدة ولا أزرار تشغيل وهمية؛ الروابط تقود إلى المصادر التي تحتوي على المقاطع.</p>
-<div class="controls"><input id="search" placeholder="اكتب اسم شخصية، لعبة أو عمل…"><select id="genre"><option value="">كل الفئات</option><option>ألعاب</option><option>أفلام ومسلسلات</option><option>أنمي</option></select><button id="reset">مسح البحث</button></div>
-<p class="note">المكتبة أدناه دليل مصادر حي: استماع/تحميل من المصدر، وليس ملفات صوت مخزنة على صَدى. مصدر الصوت قد يطلب فتح صفحة أو تنزيل أرشيف.</section>
-<div class="toolbar"><h3>مكتبة الشخصيات</h3><small id="count"></small></div><section id="catalog" class="grid"></section>
-</main><footer>صَدى — يربط إلى مصادر الصوت العامة. تحقّق من شروط المصدر وحقوق التسجيل قبل تنزيله أو إعادة استخدامه.</footer>
+<header><div class="brand"><div class="mark">◈</div><div><h1>صَدى</h1><small>مكتبة ردود الشخصيات • أصوات أصلية</small></div></div><a class="source" href="https://github.com/last43leon-cyber/point" target="_blank" rel="noopener">المصدر المفتوح</a></header>
+<main><section class="hero"><h2>اختر الموقف… ثم اختر الرد.</h2><p>المكتبة مبنية على معنى المحادثة: الكلام الذي قيل لك، ثم الرد المناسب عليه. نربط فقط تسجيلات بشرية أصلية، ونوضح إذا كان التشغيل على المصدر الخارجي حتى لا نوهمك بأن الصوت يعمل داخل صَدى.</p>
+<div class="filters"><input id="q" placeholder="ابحث عن موقف أو رد أو شخصية…"><select id="category"><option value="">كل المواقف</option></select><button id="clear">إعادة ضبط</button></div></section>
+<div class="section"><h3>مواقف شائعة</h3><span id="count" class="muted"></span></div><div id="chips" class="quick"></div><section id="list" class="grid"></section></main>
+<footer>صَدى • الأصوات أصلية من مصادرها العامة. بعض المصادر تفتح في موقعها لأنها لا توفر رابط تشغيل مباشر ثابت يمكن التحقق منه.</footer>
 <script>
-const catalog=[
-{n:"ليون كينيدي",g:"Resident Evil",c:"ألعاب",s:["https://www.101soundboards.com/sounds/16764-my-name-is-leon","https://sounds.spriters-resource.com/pc_computer/residentevil4ultimatehdedition/asset/509458/","https://sounds.spriters-resource.com/wii/residentevilthedarksidechronicles/asset/470010/"],tags:["Resident Evil 2","Resident Evil 4","صوت حقيقي"]},
-{n:"آرثر مورغان",g:"Red Dead Redemption 2",c:"ألعاب",s:["https://sounds.spriters-resource.com/pc_computer/reddeadredemption2/asset/567184/","https://www.101soundboards.com/search/arthur%20morgan"],tags:["Red Dead","Cowboy"]},
-{n:"مايكا بيل",g:"Red Dead Redemption 2",c:"ألعاب",s:["https://www.101soundboards.com/search/micah%20bell","https://www.sounds-resource.com/search/?q=Micah+Bell"],tags:["Red Dead"]},
-{n:"جون مارستون",g:"Red Dead Redemption",c:"ألعاب",s:["https://www.101soundboards.com/search/john%20marston","https://www.sounds-resource.com/search/?q=John+Marston"],tags:["Red Dead"]},
-{n:"Dutch van der Linde",g:"Red Dead Redemption 2",c:"ألعاب",s:["https://www.101soundboards.com/search/dutch%20van%20der%20linde"],tags:["Red Dead"]},
-{n:"CJ",g:"Grand Theft Auto: San Andreas",c:"ألعاب",s:["https://www.101soundboards.com/search/cj%20san%20andreas","https://www.sounds-resource.com/search/?q=CJ+San+Andreas"],tags:["GTA"]},
-{n:"Trevor Philips",g:"Grand Theft Auto V",c:"ألعاب",s:["https://www.101soundboards.com/search/trevor%20philips"],tags:["GTA"]},
-{n:"Michael De Santa",g:"Grand Theft Auto V",c:"ألعاب",s:["https://www.101soundboards.com/search/michael%20de%20santa"],tags:["GTA"]},
-{n:"Franklin Clinton",g:"Grand Theft Auto V",c:"ألعاب",s:["https://www.101soundboards.com/search/franklin%20clinton"],tags:["GTA"]},
-{n:"Kratos",g:"God of War",c:"ألعاب",s:["https://www.101soundboards.com/search/kratos","https://www.sounds-resource.com/search/?q=Kratos"],tags:["PlayStation"]},
-{n:"Joel Miller",g:"The Last of Us",c:"ألعاب",s:["https://www.101soundboards.com/search/joel%20miller","https://www.sounds-resource.com/search/?q=Joel+Miller"],tags:["PlayStation"]},
-{n:"Ellie",g:"The Last of Us",c:"ألعاب",s:["https://www.101soundboards.com/search/ellie%20the%20last%20of%20us"],tags:["PlayStation"]},
-{n:"Ghost",g:"Call of Duty: Modern Warfare",c:"ألعاب",s:["https://www.101soundboards.com/search/simon%20ghost%20riley","https://www.sounds-resource.com/search/?q=Ghost+Call+of+Duty"],tags:["COD"]},
-{n:"Captain Price",g:"Call of Duty",c:"ألعاب",s:["https://www.101soundboards.com/search/captain%20price"],tags:["COD"]},
-{n:"Master Chief",g:"Halo",c:"ألعاب",s:["https://www.101soundboards.com/search/master%20chief","https://www.sounds-resource.com/search/?q=Master+Chief"],tags:["Xbox"]},
-{n:"Geralt of Rivia",g:"The Witcher",c:"ألعاب",s:["https://www.101soundboards.com/search/geralt%20of%20rivia","https://www.sounds-resource.com/search/?q=Geralt"],tags:["Fantasy"]},
-{n:"V",g:"Cyberpunk 2077",c:"ألعاب",s:["https://www.101soundboards.com/search/cyberpunk%20v","https://www.sounds-resource.com/search/?q=Cyberpunk+V"],tags:["RPG"]},
-{n:"Joker",g:"Persona 5",c:"ألعاب",s:["https://www.101soundboards.com/search/persona%205%20joker"],tags:["Anime-style game"]},
-{n:"Sonic",g:"Sonic the Hedgehog",c:"ألعاب",s:["https://www.101soundboards.com/search/sonic%20the%20hedgehog","https://www.sounds-resource.com/search/?q=Sonic"],tags:["Platformer"]},
-{n:"Mario",g:"Super Mario",c:"ألعاب",s:["https://www.101soundboards.com/search/mario","https://www.sounds-resource.com/search/?q=Mario"],tags:["Nintendo"]},
-{n:"Link",g:"The Legend of Zelda",c:"ألعاب",s:["https://www.101soundboards.com/search/link%20zelda","https://www.sounds-resource.com/search/?q=Zelda+Link"],tags:["Nintendo"]},
-{n:"Wolverine",g:"Marvel",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/wolverine","https://www.sounds-resource.com/search/?q=Wolverine"],tags:["Marvel"]},
-{n:"Deadpool",g:"Marvel",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/deadpool"],tags:["Marvel"]},
-{n:"Batman",g:"DC",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/batman","https://www.sounds-resource.com/search/?q=Batman"],tags:["DC"]},
-{n:"Joker",g:"DC",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/dc%20joker"],tags:["DC"]},
-{n:"Lucifer Morningstar",g:"Lucifer",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/lucifer%20morningstar"],tags:["TV"]},
-{n:"Darth Vader",g:"Star Wars",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/darth%20vader","https://www.sounds-resource.com/search/?q=Darth+Vader"],tags:["Sci-Fi"]},
-{n:"Yoda",g:"Star Wars",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/yoda"],tags:["Sci-Fi"]},
-{n:"Goku",g:"Dragon Ball",c:"أنمي",s:["https://www.101soundboards.com/search/goku","https://www.sounds-resource.com/search/?q=Goku"],tags:["Anime"]},
-{n:"Vegeta",g:"Dragon Ball",c:"أنمي",s:["https://www.101soundboards.com/search/vegeta"],tags:["Anime"]},
-{n:"Naruto Uzumaki",g:"Naruto",c:"أنمي",s:["https://www.101soundboards.com/search/naruto%20uzumaki","https://www.sounds-resource.com/search/?q=Naruto"],tags:["Anime"]},
-{n:"Sasuke Uchiha",g:"Naruto",c:"أنمي",s:["https://www.101soundboards.com/search/sasuke%20uchiha"],tags:["Anime"]},
-{n:"Levi Ackerman",g:"Attack on Titan",c:"أنمي",s:["https://www.101soundboards.com/search/levi%20ackerman"],tags:["Anime"]},
-{n:"Luffy",g:"One Piece",c:"أنمي",s:["https://www.101soundboards.com/search/monkey%20d%20luffy"],tags:["Anime"]},
-{n:"Zoro",g:"One Piece",c:"أنمي",s:["https://www.101soundboards.com/search/roronoa%20zoro"],tags:["Anime"]},
-{n:"Saitama",g:"One Punch Man",c:"أنمي",s:["https://www.101soundboards.com/search/saitama"],tags:["Anime"]},
-{n:"Satoru Gojo",g:"Jujutsu Kaisen",c:"أنمي",s:["https://www.101soundboards.com/search/gojo"],tags:["Anime"]},
-{n:"Sukuna",g:"Jujutsu Kaisen",c:"أنمي",s:["https://www.101soundboards.com/search/sukuna"],tags:["Anime"]}
+const entries=[
+{trigger:"شكراً",reply:"العفو / لا شكر على واجب",category:"الامتنان",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"Don't mention it.",note:"العبارة موجودة ضمن قائمة أصوات ليون، لكن التشغيل المباشر داخل صَدى غير مثبت."},
+{trigger:"شكراً",reply:"على الرحب والسعة",category:"الامتنان",character:"Leon Kennedy",work:"Resident Evil 4 Ultimate HD",icon:"🧥",url:"https://www.101soundboards.com/sounds/53674371-pl008-0-thank-you",phrase:"Thank you.",note:"هذا تسجيل حقيقي بعنوان Thank you — ليس رد العفو، لذلك لا نعرض عليه معنى غير مطابق."},
+{trigger:"اعتذار: آسف",reply:"حصل خير / لا يهم",category:"الاعتذار",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"Don't talk like that. / Fine.",note:"الصفحة تضم مقاطع ليون، راجع العبارة في المصدر."},
+{trigger:"تحية: هلا / أهلًا",reply:"أهلًا / مرحبًا",category:"التحية",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"Hello. / Hey.",note:"مقاطع التحية مذكورة في أرشيف المصدر."},
+{trigger:"وش؟ / ماذا؟",reply:"ماذا؟ / وش؟",category:"الاستغراب",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"What? / What was that?",note:"توجد عدة مقاطع What? في المصدر."},
+{trigger:"انتظر",reply:"لحظة / انتظر",category:"طلب",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/sounds/16701-ada-wait",phrase:"Ada. Wait.",note:"مقطع موثق، مدته 3 ثوانٍ."},
+{trigger:"أحد يقول: أنت بخير؟",reply:"أنا بخير / لا تقلق",category:"الاطمئنان",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"What's wrong? / Are you there?",note:"المصدر يضم مقاطع سؤال واطمئنان؛ تحقق من العبارة المحددة."},
+{trigger:"وداع",reply:"مع السلامة / أشوفك",category:"الوداع",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"See you later (search source)",note:"افتح المصدر للعثور على المقطع."},
+{trigger:"مدح: ممتاز",reply:"تمام / حسنًا",category:"المدح",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/sounds/16803-yeah",phrase:"Yeah.",note:"مقطع Yeah موثق ومدته ثانية واحدة."},
+{trigger:"شخص يسأل: وينك؟",reply:"أنا هنا / وش تبي؟",category:"السؤال",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/sounds/16732-where-are-you-going",phrase:"Where are you going?",note:"المقطع موثق ومدته ثانيتان — لكنه سؤال وليس رد أين أنت."}
 ];
-const $=id=>document.getElementById(id);
-function render(){const q=$("search").value.trim().toLowerCase(),genre=$("genre").value;const filtered=catalog.filter(x=>(!genre||x.c===genre)&&[x.n,x.g,x.c,...x.tags].join(" ").toLowerCase().includes(q));$("count").textContent=filtered.length+" شخصية";$("catalog").innerHTML=filtered.length?filtered.map(x=>'<article class="card '+(x.n==="ليون كينيدي"||x.n==="آرثر مورغان"?"feature":"")+'"><h4>'+x.n+'</h4><div class="game">'+x.g+'</div><div class="tags">'+x.tags.map(t=>'<span class="tag">'+t+'</span>').join("")+'</div><div class="links">'+x.s.map((u,i)=>'<a class="link" target="_blank" rel="noopener noreferrer" href="'+u+'">'+(i===0?"افتح مصدر الصوت":"مصدر إضافي")+'</a>').join("")+'</div></article>').join(""):'<div class="empty">ما لقيت نتيجة بهذا الاسم.</div>'}
-$("search").addEventListener("input",render);$("genre").addEventListener("change",render);$("reset").onclick=()=>{$("search").value="";$("genre").value="";render()};render();
+const categories=[...new Set(entries.map(e=>e.category))];let chosen="";
+const q=document.getElementById("q"),cat=document.getElementById("category"),chips=document.getElementById("chips"),list=document.getElementById("list");
+categories.forEach(c=>{let o=document.createElement("option");o.value=c;o.textContent=c;cat.append(o)});
+function setFilter(c){chosen=c;cat.value=c;draw()}
+function draw(){const term=q.value.trim().toLowerCase(),c=cat.value;const filtered=entries.filter(e=>(!c||e.category===c)&&(!term||[e.trigger,e.reply,e.character,e.work,e.phrase,e.note].join(" ").toLowerCase().includes(term)));document.getElementById("count").textContent=filtered.length+" ردود ضمن الدليل";
+chips.innerHTML='<button class="chip '+(!chosen?"active":"")+'" data-c="">الكل</button>'+categories.map(c=>'<button class="chip '+(chosen===c?"active":"")+'" data-c="'+c+'">'+c+'</button>').join("");chips.querySelectorAll("button").forEach(b=>b.onclick=()=>setFilter(b.dataset.c));
+list.innerHTML=filtered.length?filtered.map(e=>'<article class="card"><div class="trigger">إذا قال لك: '+e.trigger+'</div><div class="reply">↳ '+e.reply+'</div><div class="who"><span class="portrait">'+e.icon+'</span><span><b>'+e.character+'</b><br>'+e.work+'</span></div><div style="font-size:13px;margin:5px 0"><b>العبارة الأصلية:</b> '+e.phrase+'</div><div class="muted" style="line-height:1.6;margin-bottom:11px">'+e.note+'</div><a class="source" target="_blank" rel="noopener noreferrer" href="'+e.url+'">افتح التسجيل / المصدر ↗</a></article>').join(""):'<div class="empty">لا توجد نتائج تطابق بحثك.</div>'}
+q.oninput=draw;cat.onchange=()=>{chosen=cat.value;draw()};document.getElementById("clear").onclick=()=>{q.value="";cat.value="";chosen="";draw()};draw();
 </script></body></html>
