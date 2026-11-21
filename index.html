@@ -2,117 +2,78 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090d13">
-<title>صدى | أرشيف أصوات الشخصيات</title>
+<meta name="theme-color" content="#101218"><title>صَدى — مكتبة أصوات الشخصيات</title>
 <style>
-:root{--bg:#090d13;--panel:#111923;--panel2:#172231;--line:#26364a;--gold:#d7b36a;--gold2:#f4d99c;--txt:#f4f2ed;--muted:#a5afbd;--red:#a64e45;--ok:#57c28d}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#28364a 0,transparent 44%),var(--bg);color:var(--txt);font-family:system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}header,main,footer{max-width:1240px;margin:auto;padding-inline:22px}
-header{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #ffffff12}
-.brand{display:flex;align-items:center;gap:12px}.brandmark{width:43px;height:43px;border:1px solid #b99454;border-radius:13px;display:grid;place-items:center;color:var(--gold2);font-size:23px}
-.brand h1{font-size:21px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:11px}.top-actions,.tools{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:#172231;color:var(--txt);padding:10px 14px;border-radius:11px}.btn.gold{background:var(--gold);color:#17130c;border:0;font-weight:800}.btn.danger{color:#ffb6ac;border-color:#633d3a}.btn.small{padding:7px 10px;font-size:12px}
-.hero{margin:27px 0 34px;border:1px solid #ffffff1b;border-radius:25px;padding:34px;min-height:220px;background:linear-gradient(100deg,#101925ef,#101925d9),radial-gradient(circle at 12% 30%,#80623a,transparent 40%);position:relative;overflow:hidden}
-.hero:after{content:'صَدى';position:absolute;left:25px;bottom:-40px;font-size:150px;font-weight:900;color:#ffffff08;pointer-events:none}
-.eyebrow{color:var(--gold2);font-size:11px;letter-spacing:3px}.hero h2{font-size:clamp(29px,5vw,46px);margin:10px 0}.hero p{color:#c1cad5;line-height:1.9;max-width:720px;margin:0}
-.hero-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:19px}.chip{border:1px solid var(--line);background:#101925;color:#bdc7d5;border-radius:99px;padding:7px 12px;font-size:12px}.chip.active{border-color:#a88951;color:var(--gold2);background:#30291d}
-.search{margin-top:19px;display:flex;gap:8px;max-width:680px}.search input,.field{background:#0b111a;border:1px solid #34465d;color:white;border-radius:10px;padding:12px 13px;min-width:0;width:100%;outline:none}.search input:focus,.field:focus{border-color:var(--gold)}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:28px 0 14px}.section-head h3{margin:0;font-size:20px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}
-.characters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.character{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#121b27;min-height:235px;text-align:right;color:white;padding:0;transition:.2s}.character:hover,.character.active{border-color:var(--gold);transform:translateY(-2px)}
-.portrait{height:160px;position:relative;background:linear-gradient(135deg,#34475b,#171e28);overflow:hidden}.portrait img{width:100%;height:100%;object-fit:cover;object-position:center 25%;display:block;filter:saturate(.8)}.portrait:after{content:'';position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#121b27);pointer-events:none}
-.portrait .fallback{position:absolute;inset:0;display:grid;place-items:center;font-size:60px;color:#d4b779;background:radial-gradient(circle at 50% 35%,#58677a,#19212d 70%)}
-.character-info{padding:12px 15px 14px}.character-info strong{font-size:16px}.character-info small{display:block;color:var(--muted);margin-top:3px}.character-info em{font-style:normal;color:var(--gold2);font-size:10px;display:block;margin-top:8px}
-.portrait-tools{position:absolute;top:8px;left:8px;z-index:2;background:#080b10c9;border:1px solid #ffffff44;color:white;border-radius:9px;padding:6px 8px;font-size:11px}
-.workspace{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;margin-top:17px}.panel{background:linear-gradient(160deg,#141e2a,#101720);border:1px solid var(--line);border-radius:18px;padding:18px}.panel h3{margin:0 0 5px;font-size:18px}.sub{color:var(--muted);font-size:12px;margin:0 0 15px}
-.phrase-list{display:grid;gap:10px}.phrase{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #29384b;border-radius:13px;background:#0d141e}
-.phrase-title{font-size:15px;font-weight:750;overflow-wrap:anywhere}.phrase-meta{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.8}.phrase audio{display:block;width:min(100%,440px);height:36px;margin-top:9px}
-.phrase-actions{display:flex;gap:6px;flex-wrap:wrap}.empty{padding:34px 12px;text-align:center;color:var(--muted);border:1px dashed #3b4b60;border-radius:13px}
-.editbox{display:grid;gap:10px}.field-label{font-size:12px;color:#c8d0dc;margin-bottom:-5px}.upload{border:1px dashed #796747;border-radius:12px;padding:13px;background:#171d25}.upload input{width:100%;color:var(--muted);font-size:12px}
-.help{font-size:11px;color:var(--muted);line-height:1.8}.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.editor-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.hidden{display:none!important}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#e6d2a4;color:#17130c;padding:11px 17px;border-radius:12px;font-weight:700;z-index:20;box-shadow:0 10px 35px #0008;max-width:90%;text-align:center}
-.line{height:1px;background:#29384b;margin:14px 0}footer{padding:30px 22px 45px;color:#8995a5;font-size:11px;line-height:1.9}.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:16px;z-index:10}.modal-card{background:#141e2a;border:1px solid #536178;border-radius:18px;padding:20px;width:min(100%,520px);max-height:90vh;overflow:auto}.modal-card h3{margin-top:0}
-@media(max-width:850px){.characters{grid-template-columns:repeat(2,1fr)}.workspace{grid-template-columns:1fr}.side{order:-1}}
-@media(max-width:520px){header,main,footer{padding-inline:14px}header{padding-block:10px;align-items:flex-start}.top-actions{justify-content:flex-end}.top-actions .btn{font-size:11px;padding:8px}.hero{padding:23px 18px}.characters{gap:9px}.portrait{height:130px}.character{min-height:195px}.phrase{grid-template-columns:1fr}.phrase-actions{justify-content:flex-start}.section-head{align-items:start;flex-direction:column}.search{flex-wrap:wrap}.search input{flex:1 1 100%}}
-</style>
-</head>
-<body>
-<header><div class="brand"><div class="brandmark">◈</div><div><h1>صَدى</h1><p>أرشيف الردود الصوتية للشخصيات</p></div></div><div class="top-actions"><button class="btn" id="exportBtn">نسخة احتياطية</button><button class="btn gold" id="addBtn">＋ إضافة رد</button></div></header>
+:root{--bg:#101218;--card:#1b1e24;--soft:#242832;--line:#333945;--text:#f3f4f6;--muted:#aeb5c0;--accent:#d5ae69}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,"Segoe UI",sans-serif}
+header{max-width:1150px;margin:auto;padding:24px 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:44px;height:44px;border:1px solid var(--accent);border-radius:14px;display:grid;place-items:center;color:var(--accent);font-size:22px}h1{margin:0;font-size:22px}header p{margin:3px 0;color:var(--muted);font-size:12px}
+main{max-width:1150px;margin:auto;padding:0 18px 40px}
+.hero{padding:30px 25px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(125deg,#272b34,#171a20);margin-bottom:20px}
+.hero h2{margin:0 0 8px;font-size:clamp(24px,4vw,36px)}.hero p{margin:0;color:#c2c7d0;line-height:1.8;max-width:750px}
+.controls{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap}
+input,select{background:#101318;color:var(--text);border:1px solid var(--line);padding:12px 14px;border-radius:11px;font:inherit;min-width:0}#search{flex:1;min-width:190px}
+button{background:var(--soft);border:1px solid var(--line);color:var(--text);padding:10px 14px;border-radius:11px;font:inherit;cursor:pointer}button:hover,.link:hover{border-color:var(--accent);color:var(--accent)}.note{font-size:12px;color:var(--muted);margin:13px 0 0}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 12px;flex-wrap:wrap}.toolbar h3{margin:0}.toolbar small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px;min-width:0}
+.card h4{margin:0;font-size:17px}.game{font-size:12px;color:var(--muted);margin:5px 0 12px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tag{border:1px solid var(--line);color:#c6cbd4;border-radius:99px;padding:5px 9px;font-size:11px}
+.links{display:flex;flex-wrap:wrap;gap:7px}.link{display:inline-block;color:#e9d2a5;text-decoration:none;border:1px solid #665338;border-radius:9px;padding:8px 10px;font-size:12px}
+.feature{border-color:#6d5734;background:#26221c}.feature .link{background:#31291e}
+.empty{padding:25px;text-align:center;color:var(--muted);grid-column:1/-1}
+footer{max-width:1150px;margin:auto;padding:0 18px 28px;color:var(--muted);font-size:12px;line-height:1.8}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){header{padding-top:16px}.grid{grid-template-columns:1fr}.hero{padding:22px 18px}main{padding-inline:13px}header,footer{padding-inline:13px}}
+</style></head><body>
+<header><div class="brand"><div class="logo">◈</div><div><h1>صَدى</h1><p>دليل أصوات الشخصيات — تسجيلات بشرية حقيقية</p></div></div><a class="link" href="https://github.com/last43leon-cyber/point" target="_blank" rel="noopener">المستودع</a></header>
 <main>
-<section class="hero"><div class="eyebrow">VOICE COLLECTION · YOUR ARCHIVE</div><h2>أصوات الشخصيات… واضحة ومرتبة في مكان واحد.</h2><p>مكتبة شخصية لردود وعبارات الشخصيات. أضف التسجيلات من جهازك، أو اربط ملفات الأرشيف، وابحث وصنّف وشغّل كل مقطع بصورة مستقلة.</p>
-<div class="hero-row"><span class="chip">أرشيف أصوات الرجال</span><span class="chip">تشغيل مباشر</span><span class="chip">بحث وتصنيف</span><span class="chip">حفظ محلي</span><span class="chip">نسخة احتياطية تشمل التسجيلات</span></div>
-<div class="search"><input id="search" placeholder="ابحث عن عبارة أو ملف أو شخصية…"><button class="btn" id="clearSearch">مسح</button></div></section>
-<div class="section-head"><div><h3>اختر الشخصية</h3><p>يمكنك رفع صورة بديلة لكل شخصية.</p></div><span class="sub" id="charCount"></span></div><section class="characters" id="characters"></section>
-<div class="section-head"><div><h3>مكتبة الردود</h3><p>يمكن تعديل العبارة أو الشخصية أو التصنيف أو التسجيل في أي وقت.</p></div><span class="sub" id="activeName">جميع الشخصيات</span></div><div class="filters" id="filters"></div>
-<div class="workspace"><section class="panel"><div class="editor-title"><div><h3>العبارات والتسجيلات</h3><p class="sub" id="resultCount">0 رد</p></div><button class="btn gold" id="addBtn2">＋ رد جديد</button></div><div class="phrase-list" id="list"></div></section>
-<aside class="panel side"><h3>لوحة الإدارة</h3><p class="sub">استيراد وتصدير وإدارة الأرشيف</p><div class="editbox">
-<button class="btn gold" id="loadMalePackBtn">إنشاء فهرس 298 مقطعًا</button>
-<button class="btn" id="loadIndexJsonBtn">قراءة index.json</button>
-<button class="btn" id="quickAdd">＋ أنشئ عبارة جديدة</button>
-<button class="btn" id="importBtn">استيراد نسخة احتياطية JSON</button><input type="file" id="importFile" accept="application/json,.json" class="hidden">
-<div class="line"></div><p class="help">المسار الافتراضي للمقاطع: <code>re1-male-voices/clips/clip_001.mp3</code>. يجب أن يكون مجلد الأرشيف بجانب صفحة الموقع، وأن تفتح الصفحة عبر خادم محلي أو استضافة تسمح بقراءة الملفات.</p>
-<p class="help">إنشاء الفهرس لا ينشئ ملفات MP3 ولا يثبت أن المقاطع موجودة؛ إنه يضيف سجلات ومسارات فقط.</p>
-<div class="line"></div><button class="btn danger" id="resetBtn">إعادة ضبط المكتبة الافتراضية</button>
-</div></aside></div></main>
-<footer>صدى — مكتبة شخصية قابلة للتخصيص. تحفظ البيانات والتسجيلات في مساحة المتصفح على هذا الجهاز. احتفظ بنسخة احتياطية دوريًا. استخدم ملفات وصورًا تملك حق استخدامها.</footer>
-<div id="modal" class="modal hidden"><div class="modal-card"><div class="editor-title"><h3 id="modalTitle">إضافة رد</h3><button class="btn small" id="closeModal">إغلاق ✕</button></div>
-<form id="phraseForm" class="editbox"><input type="hidden" id="editId"><label class="field-label">العبارة المكتوبة</label><input class="field" id="phraseText" placeholder="مثال: clip_001 - مقطع صوتي" required>
-<label class="field-label">الشخصية</label><select class="field" id="phraseChar"></select>
-<label class="field-label">التصنيف</label><input class="field" id="phraseCategory" list="categories" value="أصوات الرجال"><datalist id="categories"><option>أصوات الرجال</option><option>التحيات</option><option>الشكر</option><option>المواقف</option><option>الوداع</option><option>الردود الساخرة</option></datalist>
-<label class="field-label">مسار أو رابط ملف صوتي مباشر</label><input class="field" id="audioUrl" placeholder="re1-male-voices/clips/clip_001.mp3">
-<label class="field-label">أو ارفع ملفًا صوتيًا من جهازك</label><div class="upload"><input type="file" id="audioFile" accept="audio/*"><div class="help" id="audioStatus">اربط مسارًا أو ارفع ملفًا صوتيًا. التسجيل المرفوع يُحفظ داخل المتصفح.</div></div>
-<div class="tools"><button class="btn gold" type="submit">حفظ الرد</button><button class="btn" type="button" id="removeAudio">إزالة التسجيل</button></div></form></div></div><div id="toast" class="toast hidden"></div>
+<section class="hero"><h2>صوت الشخصية، من مصدره.</h2><p>ابحث عن شخصيات الألعاب والأفلام والمسلسلات. افتح أرشيفات التسجيلات الحقيقية أو صفحات الصوت المعروفة. لا توجد ملفات صوت مولّدة ولا أزرار تشغيل وهمية؛ الروابط تقود إلى المصادر التي تحتوي على المقاطع.</p>
+<div class="controls"><input id="search" placeholder="اكتب اسم شخصية، لعبة أو عمل…"><select id="genre"><option value="">كل الفئات</option><option>ألعاب</option><option>أفلام ومسلسلات</option><option>أنمي</option></select><button id="reset">مسح البحث</button></div>
+<p class="note">المكتبة أدناه دليل مصادر حي: استماع/تحميل من المصدر، وليس ملفات صوت مخزنة على صَدى. مصدر الصوت قد يطلب فتح صفحة أو تنزيل أرشيف.</section>
+<div class="toolbar"><h3>مكتبة الشخصيات</h3><small id="count"></small></div><section id="catalog" class="grid"></section>
+</main><footer>صَدى — يربط إلى مصادر الصوت العامة. تحقّق من شروط المصدر وحقوق التسجيل قبل تنزيله أو إعادة استخدامه.</footer>
 <script>
-'use strict';
-const ARCHIVE_BASE='re1-male-voices/clips';
-const chars=[
-{id:'leon',name:'ليون كينيدي',game:'Resident Evil',tag:'العميل الهادئ',img:'https://commons.wikimedia.org/wiki/Special:FilePath/Resident%20Evil%204%20-%20Leon%20S.%20Kennedy.jpg'},
-{id:'arthur',name:'آرثر مورغان',game:'Red Dead Redemption 2',tag:'خارج عن القانون',img:'https://commons.wikimedia.org/wiki/Special:FilePath/Croquis%20arthur%20morgan.png'},
-{id:'micah',name:'مايكا بيل',game:'Red Dead Redemption 2',tag:'الثعلب الماكر',img:'https://static.wikia.nocookie.net/reddeadredemption/images/7/7c/Micah_Bell.png'},
-{id:'lucifer',name:'لوسيفر',game:'Lucifer',tag:'سيد الإغواء',img:'https://static.wikia.nocookie.net/lucifer/images/7/7b/Lucifer_Morningstar.png'}];
+const catalog=[
+{n:"ليون كينيدي",g:"Resident Evil",c:"ألعاب",s:["https://www.101soundboards.com/sounds/16764-my-name-is-leon","https://sounds.spriters-resource.com/pc_computer/residentevil4ultimatehdedition/asset/509458/","https://sounds.spriters-resource.com/wii/residentevilthedarksidechronicles/asset/470010/"],tags:["Resident Evil 2","Resident Evil 4","صوت حقيقي"]},
+{n:"آرثر مورغان",g:"Red Dead Redemption 2",c:"ألعاب",s:["https://sounds.spriters-resource.com/pc_computer/reddeadredemption2/asset/567184/","https://www.101soundboards.com/search/arthur%20morgan"],tags:["Red Dead","Cowboy"]},
+{n:"مايكا بيل",g:"Red Dead Redemption 2",c:"ألعاب",s:["https://www.101soundboards.com/search/micah%20bell","https://www.sounds-resource.com/search/?q=Micah+Bell"],tags:["Red Dead"]},
+{n:"جون مارستون",g:"Red Dead Redemption",c:"ألعاب",s:["https://www.101soundboards.com/search/john%20marston","https://www.sounds-resource.com/search/?q=John+Marston"],tags:["Red Dead"]},
+{n:"Dutch van der Linde",g:"Red Dead Redemption 2",c:"ألعاب",s:["https://www.101soundboards.com/search/dutch%20van%20der%20linde"],tags:["Red Dead"]},
+{n:"CJ",g:"Grand Theft Auto: San Andreas",c:"ألعاب",s:["https://www.101soundboards.com/search/cj%20san%20andreas","https://www.sounds-resource.com/search/?q=CJ+San+Andreas"],tags:["GTA"]},
+{n:"Trevor Philips",g:"Grand Theft Auto V",c:"ألعاب",s:["https://www.101soundboards.com/search/trevor%20philips"],tags:["GTA"]},
+{n:"Michael De Santa",g:"Grand Theft Auto V",c:"ألعاب",s:["https://www.101soundboards.com/search/michael%20de%20santa"],tags:["GTA"]},
+{n:"Franklin Clinton",g:"Grand Theft Auto V",c:"ألعاب",s:["https://www.101soundboards.com/search/franklin%20clinton"],tags:["GTA"]},
+{n:"Kratos",g:"God of War",c:"ألعاب",s:["https://www.101soundboards.com/search/kratos","https://www.sounds-resource.com/search/?q=Kratos"],tags:["PlayStation"]},
+{n:"Joel Miller",g:"The Last of Us",c:"ألعاب",s:["https://www.101soundboards.com/search/joel%20miller","https://www.sounds-resource.com/search/?q=Joel+Miller"],tags:["PlayStation"]},
+{n:"Ellie",g:"The Last of Us",c:"ألعاب",s:["https://www.101soundboards.com/search/ellie%20the%20last%20of%20us"],tags:["PlayStation"]},
+{n:"Ghost",g:"Call of Duty: Modern Warfare",c:"ألعاب",s:["https://www.101soundboards.com/search/simon%20ghost%20riley","https://www.sounds-resource.com/search/?q=Ghost+Call+of+Duty"],tags:["COD"]},
+{n:"Captain Price",g:"Call of Duty",c:"ألعاب",s:["https://www.101soundboards.com/search/captain%20price"],tags:["COD"]},
+{n:"Master Chief",g:"Halo",c:"ألعاب",s:["https://www.101soundboards.com/search/master%20chief","https://www.sounds-resource.com/search/?q=Master+Chief"],tags:["Xbox"]},
+{n:"Geralt of Rivia",g:"The Witcher",c:"ألعاب",s:["https://www.101soundboards.com/search/geralt%20of%20rivia","https://www.sounds-resource.com/search/?q=Geralt"],tags:["Fantasy"]},
+{n:"V",g:"Cyberpunk 2077",c:"ألعاب",s:["https://www.101soundboards.com/search/cyberpunk%20v","https://www.sounds-resource.com/search/?q=Cyberpunk+V"],tags:["RPG"]},
+{n:"Joker",g:"Persona 5",c:"ألعاب",s:["https://www.101soundboards.com/search/persona%205%20joker"],tags:["Anime-style game"]},
+{n:"Sonic",g:"Sonic the Hedgehog",c:"ألعاب",s:["https://www.101soundboards.com/search/sonic%20the%20hedgehog","https://www.sounds-resource.com/search/?q=Sonic"],tags:["Platformer"]},
+{n:"Mario",g:"Super Mario",c:"ألعاب",s:["https://www.101soundboards.com/search/mario","https://www.sounds-resource.com/search/?q=Mario"],tags:["Nintendo"]},
+{n:"Link",g:"The Legend of Zelda",c:"ألعاب",s:["https://www.101soundboards.com/search/link%20zelda","https://www.sounds-resource.com/search/?q=Zelda+Link"],tags:["Nintendo"]},
+{n:"Wolverine",g:"Marvel",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/wolverine","https://www.sounds-resource.com/search/?q=Wolverine"],tags:["Marvel"]},
+{n:"Deadpool",g:"Marvel",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/deadpool"],tags:["Marvel"]},
+{n:"Batman",g:"DC",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/batman","https://www.sounds-resource.com/search/?q=Batman"],tags:["DC"]},
+{n:"Joker",g:"DC",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/dc%20joker"],tags:["DC"]},
+{n:"Lucifer Morningstar",g:"Lucifer",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/lucifer%20morningstar"],tags:["TV"]},
+{n:"Darth Vader",g:"Star Wars",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/darth%20vader","https://www.sounds-resource.com/search/?q=Darth+Vader"],tags:["Sci-Fi"]},
+{n:"Yoda",g:"Star Wars",c:"أفلام ومسلسلات",s:["https://www.101soundboards.com/search/yoda"],tags:["Sci-Fi"]},
+{n:"Goku",g:"Dragon Ball",c:"أنمي",s:["https://www.101soundboards.com/search/goku","https://www.sounds-resource.com/search/?q=Goku"],tags:["Anime"]},
+{n:"Vegeta",g:"Dragon Ball",c:"أنمي",s:["https://www.101soundboards.com/search/vegeta"],tags:["Anime"]},
+{n:"Naruto Uzumaki",g:"Naruto",c:"أنمي",s:["https://www.101soundboards.com/search/naruto%20uzumaki","https://www.sounds-resource.com/search/?q=Naruto"],tags:["Anime"]},
+{n:"Sasuke Uchiha",g:"Naruto",c:"أنمي",s:["https://www.101soundboards.com/search/sasuke%20uchiha"],tags:["Anime"]},
+{n:"Levi Ackerman",g:"Attack on Titan",c:"أنمي",s:["https://www.101soundboards.com/search/levi%20ackerman"],tags:["Anime"]},
+{n:"Luffy",g:"One Piece",c:"أنمي",s:["https://www.101soundboards.com/search/monkey%20d%20luffy"],tags:["Anime"]},
+{n:"Zoro",g:"One Piece",c:"أنمي",s:["https://www.101soundboards.com/search/roronoa%20zoro"],tags:["Anime"]},
+{n:"Saitama",g:"One Punch Man",c:"أنمي",s:["https://www.101soundboards.com/search/saitama"],tags:["Anime"]},
+{n:"Satoru Gojo",g:"Jujutsu Kaisen",c:"أنمي",s:["https://www.101soundboards.com/search/gojo"],tags:["Anime"]},
+{n:"Sukuna",g:"Jujutsu Kaisen",c:"أنمي",s:["https://www.101soundboards.com/search/sukuna"],tags:["Anime"]}
+];
 const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let items=[],active='',cat='الكل',q='',db,toastTimer;
-const objectUrls=new Map();
-function buildMaleArchiveItems(){return Array.from({length:298},(_,i)=>{const n=String(i+1).padStart(3,'0');return{id:'male_clip_'+n,character:'unassigned',phrase:`مقطع صوتي #${n} (clip_${n}.mp3)`,category:'أصوات الرجال',audio:`${ARCHIVE_BASE}/clip_${n}.mp3`}})}
-function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open('sada-audio-v2',1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('audio'))req.result.createObjectStore('audio')};req.onsuccess=()=>{db=req.result;resolve(db)};req.onerror=()=>reject(req.error)})}
-function audioGet(id){return new Promise(resolve=>{if(!db)return resolve(null);const req=db.transaction('audio').objectStore('audio').get(id);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>resolve(null)})}
-function audioSet(id,blob){return new Promise((resolve,reject)=>{const tx=db.transaction('audio','readwrite');tx.objectStore('audio').put(blob,id);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}
-function audioDel(id){return new Promise(resolve=>{if(!db)return resolve();const tx=db.transaction('audio','readwrite');tx.objectStore('audio').delete(id);tx.oncomplete=resolve;tx.onerror=resolve})}
-function persist(){localStorage.setItem('sada-items',JSON.stringify(items))}
-function notify(message){$('toast').textContent=message;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2800)}
-function revokeUrl(key){if(objectUrls.has(key)){URL.revokeObjectURL(objectUrls.get(key));objectUrls.delete(key)}}
-function blobUrl(key,blob){revokeUrl(key);const url=URL.createObjectURL(blob);objectUrls.set(key,url);return url}
-function characterName(id){return chars.find(c=>c.id===id)?.name||(id==='unassigned'?'غير محددة':'شخصية غير معروفة')}
-async function render(){
- $('charCount').textContent=chars.length+' شخصيات';
- $('characters').innerHTML=chars.map(c=>`<article class="character ${active===c.id?'active':''}" data-char="${c.id}"><div class="portrait"><div class="fallback">${esc(c.name[0])}</div><img src="${c.img}" alt="${esc(c.name)}" loading="lazy" onerror="this.style.display='none'"><button class="portrait-tools" type="button" data-photo="${c.id}">رفع صورة</button></div><div class="character-info"><strong>${esc(c.name)}</strong><small>${esc(c.game)}</small><em>${esc(c.tag)}</em></div></article>`).join('');
- for(const c of chars){const pic=await audioGet('portrait-'+c.id);if(pic){const img=document.querySelector(`[data-char="${c.id}"] .portrait img`);if(img){img.style.display='block';img.src=blobUrl('portrait-'+c.id,pic)}}}
- const categories=['الكل',...new Set(items.map(x=>x.category||'بدون تصنيف'))];
- $('filters').innerHTML=categories.map(x=>`<button class="chip ${cat===x?'active':''}" data-cat="${esc(x)}">${esc(x)}</button>`).join('');
- const shown=items.filter(x=>{const hay=(x.phrase+' '+(x.audio||'')+' '+characterName(x.character)).toLowerCase();return(!active||x.character===active)&&(cat==='الكل'||(x.category||'بدون تصنيف')===cat)&&(!q||hay.includes(q.toLowerCase()))});
- $('activeName').textContent=active?characterName(active):'جميع الشخصيات';$('resultCount').textContent=shown.length+' رد';
- if(!shown.length){$('list').innerHTML='<div class="empty">لا توجد نتائج. أضف ردًا جديدًا أو غيّر البحث والتصفية.</div>';return}
- const blobs=new Map();for(const x of shown)blobs.set(x.id,await audioGet(x.id));
- $('list').innerHTML=shown.map(x=>{const hasBlob=!!blobs.get(x.id),hasPath=!!x.audio?.trim();const status=hasBlob?'تسجيل محفوظ على الجهاز':hasPath?'مسار صوت مسجل — لم يتم التحقق من وجود الملف':'بدون تسجيل';return`<article class="phrase"><div><div class="phrase-title">${esc(x.phrase)}</div><div class="phrase-meta">${esc(characterName(x.character))} · ${esc(x.category||'بدون تصنيف')} · ${esc(status)}</div><div id="player-${esc(x.id)}"></div></div><div class="phrase-actions"><button class="btn small" data-edit="${esc(x.id)}">تعديل</button><button class="btn small danger" data-delete="${esc(x.id)}">حذف</button></div></article>`}).join('');
- for(const x of shown){const blob=blobs.get(x.id),src=blob?blobUrl(x.id,blob):(x.audio?.trim()||'');if(src){const audio=document.createElement('audio');audio.controls=true;audio.preload='none';audio.src=src;audio.onerror=()=>{const note=document.createElement('div');note.className='help';note.textContent='تعذر تشغيل هذا المسار. تحقق من اسم الملف ومكانه أو ارفع التسجيل من جهازك.';$('player-'+x.id)?.append(note)};$('player-'+x.id)?.append(audio)}}
-}
-function openModal(x=null){$('phraseForm').reset();$('editId').value=x?.id||'';$('phraseText').value=x?.phrase||'';$('phraseCategory').value=x?.category||'أصوات الرجال';$('phraseChar').innerHTML='<option value="unassigned">غير محددة</option>'+chars.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');$('phraseChar').value=x?.character||active||'unassigned';$('audioUrl').value=x?.audio||'';$('modalTitle').textContent=x?'تعديل الرد':'إضافة رد جديد';$('audioStatus').textContent=x?'يمكنك استبدال التسجيل أو مساره.':'اربط مسار ملف أو ارفع تسجيلًا من جهازك.';$('modal').classList.remove('hidden')}
-$('loadMalePackBtn').onclick=()=>{const pack=buildMaleArchiveItems(),ids=new Set(items.map(x=>x.id));const fresh=pack.filter(x=>!ids.has(x.id));items=[...items,...fresh];persist();render();notify(`أضيف ${fresh.length} سجلًا جديدًا. هذه مسارات وليست ملفات صوتية.`)};
-$('loadIndexJsonBtn').onclick=async()=>{try{const res=await fetch('re1-male-voices/index.json');if(!res.ok)throw Error('HTTP '+res.status);const data=await res.json();const entries=Array.isArray(data)?data:(data.clips||data.items);if(!Array.isArray(entries)||!entries.length)throw Error('صيغة غير معروفة');const mapped=entries.map((e,i)=>{const file=String(e.file||e.path||e.audio||`clip_${String(i+1).padStart(3,'0')}.mp3`);return{id:String(e.id||'index_'+i),character:e.character&&chars.some(c=>c.id===e.character)?e.character:'unassigned',phrase:String(e.text||e.label||e.title||e.phrase||file),category:String(e.category||'أصوات الرجال'),audio:file.includes('/')?file:`${ARCHIVE_BASE}/${file}`}});const old=new Set(items.map(x=>x.id));let added=0;for(const x of mapped){if(!old.has(x.id)){items.push(x);old.add(x.id);added++}}persist();await render();notify(`تمت قراءة ${mapped.length} خانة؛ أضيف ${added} سجلًا دون استبدال مكتبتك.`)}catch(err){notify('تعذرت قراءة index.json. شغّل الصفحة عبر خادم محلي وتحقق من المسار والصيغة.')}};
-$('characters').addEventListener('click',e=>{const photo=e.target.closest('[data-photo]');if(photo){e.stopPropagation();const c=chars.find(x=>x.id===photo.dataset.photo),pick=document.createElement('input');pick.type='file';pick.accept='image/*';pick.onchange=async()=>{if(pick.files[0]){await audioSet('portrait-'+c.id,pick.files[0]);await render();notify('تم تحديث صورة '+c.name)}};pick.click();return}const card=e.target.closest('[data-char]');if(card){active=active===card.dataset.char?'':card.dataset.char;render()}});
-$('filters').onclick=e=>{const b=e.target.closest('[data-cat]');if(b){cat=b.dataset.cat;render()}};
-$('search').oninput=e=>{q=e.target.value.trim();render()};$('clearSearch').onclick=()=>{$('search').value='';q='';render()};
-['addBtn','addBtn2','quickAdd'].forEach(id=>$(id).onclick=()=>openModal());$('closeModal').onclick=()=>$('modal').classList.add('hidden');
-$('list').onclick=async e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit)openModal(items.find(x=>x.id===edit.dataset.edit));if(del&&confirm('تحذف الرد والتسجيل المحلي المرتبط به؟')){await audioDel(del.dataset.delete);revokeUrl(del.dataset.delete);items=items.filter(x=>x.id!==del.dataset.delete);persist();await render();notify('تم حذف الرد')}};
-$('phraseForm').onsubmit=async e=>{e.preventDefault();const id=$('editId').value||'v'+Date.now(),old=items.find(x=>x.id===id),file=$('audioFile').files[0],url=$('audioUrl').value.trim();const entry={id,character:$('phraseChar').value,phrase:$('phraseText').value.trim(),category:$('phraseCategory').value.trim()||'بدون تصنيف',audio:url};if(file){await audioSet(id,file);revokeUrl(id)}else if(old&&!url&&old.audio){entry.audio=''}if(old)items=items.map(x=>x.id===id?entry:x);else items.unshift(entry);persist();$('modal').classList.add('hidden');await render();notify('تم حفظ الرد')};
-$('removeAudio').onclick=async()=>{const id=$('editId').value;if(id){await audioDel(id);revokeUrl(id)}$('audioFile').value='';$('audioUrl').value='';$('audioStatus').textContent='أزيل التسجيل المحلي والمسار من النموذج. اضغط حفظ لتثبيت التعديل.'};
-$('exportBtn').onclick=async()=>{try{const backup={format:'sada-backup',version:2,createdAt:new Date().toISOString(),items,blobs:[]};for(const x of items){const blob=await audioGet(x.id);if(blob)backup.blobs.push({id:x.id,type:blob.type||'audio/mpeg',data:await blobToDataURL(blob)})}for(const c of chars){const blob=await audioGet('portrait-'+c.id);if(blob)backup.blobs.push({id:'portrait-'+c.id,type:blob.type||'image/jpeg',data:await blobToDataURL(blob)})}downloadText(JSON.stringify(backup),`sada-backup-${new Date().toISOString().slice(0,10)}.json`,'application/json');notify('تم تجهيز نسخة احتياطية تشمل التسجيلات والصور')}catch(e){notify('تعذر التصدير؛ قد تكون مساحة الذاكرة غير كافية')}};
-function blobToDataURL(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(blob)})}
-function dataURLToBlob(url){const [head,data]=url.split(',');const mime=head.match(/:(.*?);/)?.[1]||'application/octet-stream';const raw=atob(data),arr=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);return new Blob([arr],{type:mime})}
-function downloadText(text,name,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-$('importBtn').onclick=()=>$('importFile').click();
-$('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());const imported=Array.isArray(data)?data:data.items;if(!Array.isArray(imported))throw Error('bad format');if(!confirm('سيتم استبدال قائمة الردود الحالية. هل تريد المتابعة؟'))return;items=imported.map(x=>({id:String(x.id||'v'+Math.random()),character:chars.some(c=>c.id===x.character)?x.character:'unassigned',phrase:String(x.phrase||x.text||'مقطع صوتي'),category:String(x.category||'بدون تصنيف'),audio:String(x.audio||'')}));if(data.blobs&&Array.isArray(data.blobs)){for(const b of data.blobs){if(b.id&&b.data)await audioSet(b.id,dataURLToBlob(b.data))}}persist();await render();notify('تم استيراد النسخة الاحتياطية')}catch(err){notify('ملف JSON غير صالح أو تعذر استيراده')}finally{e.target.value=''}};
-$('resetBtn').onclick=()=>{if(confirm('ستُستبدل قائمة الردود الحالية بفهرس 298 مسارًا افتراضيًا. لن تُحذف ملفات الصوت المحلية. هل تتابع؟')){items=buildMaleArchiveItems();persist();active='';cat='الكل';render();notify('تمت إعادة إنشاء الفهرس الافتراضي')}};
-(async()=>{try{await openDB();const saved=JSON.parse(localStorage.getItem('sada-items')||'null');items=Array.isArray(saved)?saved:buildMaleArchiveItems();if(!saved)persist();await render()}catch(e){items=buildMaleArchiveItems();render();notify('تعذر فتح التخزين المحلي. قد لا تُحفظ التسجيلات المرفوعة.')}})();
-</script>
-</body></html>
+function render(){const q=$("search").value.trim().toLowerCase(),genre=$("genre").value;const filtered=catalog.filter(x=>(!genre||x.c===genre)&&[x.n,x.g,x.c,...x.tags].join(" ").toLowerCase().includes(q));$("count").textContent=filtered.length+" شخصية";$("catalog").innerHTML=filtered.length?filtered.map(x=>'<article class="card '+(x.n==="ليون كينيدي"||x.n==="آرثر مورغان"?"feature":"")+'"><h4>'+x.n+'</h4><div class="game">'+x.g+'</div><div class="tags">'+x.tags.map(t=>'<span class="tag">'+t+'</span>').join("")+'</div><div class="links">'+x.s.map((u,i)=>'<a class="link" target="_blank" rel="noopener noreferrer" href="'+u+'">'+(i===0?"افتح مصدر الصوت":"مصدر إضافي")+'</a>').join("")+'</div></article>').join(""):'<div class="empty">ما لقيت نتيجة بهذا الاسم.</div>'}
+$("search").addEventListener("input",render);$("genre").addEventListener("change",render);$("reset").onclick=()=>{$("search").value="";$("genre").value="";render()};render();
+</script></body></html>
