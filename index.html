@@ -8,7 +8,7 @@
 <header><div class="brand"><div class="mark">◈</div><div><h1>صَدى</h1><small>مكتبة ردود الشخصيات • أصوات أصلية</small></div></div><a class="source" href="https://github.com/last43leon-cyber/point" target="_blank" rel="noopener">المصدر المفتوح</a></header>
 <main><section class="hero"><h2>اختر الموقف… ثم اختر الرد.</h2><p>المكتبة مبنية على معنى المحادثة: الموقف الذي يحدث، ثم الرد المناسب بصوت الشخصية.</p>
 <div class="filters"><input id="q" placeholder="ابحث عن موقف أو رد أو شخصية…"><select id="category"><option value="">كل المواقف</option></select><button id="clear">إعادة ضبط</button></div></section>
-<div class="section"><h3>مواقف شائعة</h3><span id="count" class="muted"></span></div><div id="chips" class="quick"></div><section id="list" class="grid"></section></main>
+<div class="section"><h3>مواقف شائعة</h3><span id="count" class="muted"></span></div><div id="chips" class="quick"></div><section id="list" class="grid"></section><section class="hero" id="audioVault" style="margin-top:18px"><h2 style="font-size:22px">خزنة الأصوات المحلية</h2><p>أضف ملفات أصوات أصلية من جهازك؛ تُحفظ محليًا في المتصفح ويمكن تشغيلها داخل صَدى. لا يتم رفع الملفات إلى أي خادم.</p><div class="filters"><input type="file" id="audioFiles" accept="audio/*" multiple><button id="clearAudio">حذف الملفات المحلية</button></div><div id="audioStatus" class="muted" style="margin-top:10px">لا توجد ملفات صوتية مضافة محليًا.</div><div id="audioShelf" class="grid" style="margin-top:12px"></div></section></main>
 <footer>صَدى • مكتبة ردود صوتية حسب الموقف. الملفات الصوتية المحلية ستظهر هنا عند توفرها.</footer>
 <script>
 const entries=[
@@ -30,4 +30,18 @@ function draw(){const term=q.value.trim().toLowerCase(),c=cat.value;const filter
 chips.innerHTML='<button class="chip '+(!chosen?"active":"")+'" data-c="">الكل</button>'+categories.map(c=>'<button class="chip '+(chosen===c?"active":"")+'" data-c="'+c+'">'+c+'</button>').join("");chips.querySelectorAll("button").forEach(b=>b.onclick=()=>setFilter(b.dataset.c));
 list.innerHTML=filtered.length?filtered.map(e=>'<article class="card"><div class="trigger">إذا قال لك: '+e.trigger+'</div><div class="reply">↳ '+e.reply+'</div><div class="who"><span class="portrait">'+e.icon+'</span><span><b>'+e.character+'</b><br>'+e.work+'</span></div><div style="font-size:13px;margin:5px 0"><b>العبارة الأصلية:</b> '+e.phrase+'</div><div class="muted" style="line-height:1.6;margin-bottom:11px">'+e.note+'</div><a class="source" target="_blank" rel="noopener noreferrer" href="'+e.url+'">افتح التسجيل / المصدر ↗</a></article>').join(""):'<div class="empty">لا توجد نتائج تطابق بحثك.</div>'}
 q.oninput=draw;cat.onchange=()=>{chosen=cat.value;draw()};document.getElementById("clear").onclick=()=>{q.value="";cat.value="";chosen="";draw()};draw();
+
+// Audio vault: browser-local IndexedDB, files never leave this device.
+const DB_NAME='sada-audio-v1', STORE='clips';
+let db;
+function openAudioDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>req.result.createObjectStore(STORE,{keyPath:'id'});req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error})}
+function audioTx(mode){return db.transaction(STORE,mode).objectStore(STORE)}
+function getClips(){return new Promise((resolve,reject)=>{const r=audioTx('readonly').getAll();r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error})}
+function putClip(file){return new Promise((resolve,reject)=>{const r=audioTx('readwrite').put({id:file.name+'-'+file.size+'-'+file.lastModified,name:file.name,size:file.size,type:file.type,blob:file,added:Date.now()});r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error})}
+function clearClips(){return new Promise((resolve,reject)=>{const r=audioTx('readwrite').clear();r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error})}
+function niceSize(n){return n<1024*1024?(n/1024).toFixed(0)+' KB':(n/1024/1024).toFixed(1)+' MB'}
+async function renderAudioShelf(){const clips=await getClips(),shelf=document.getElementById('audioShelf');document.getElementById('audioStatus').textContent=clips.length?clips.length+' ملفات محفوظة محليًا · '+niceSize(clips.reduce((a,c)=>a+c.size,0)):'لا توجد ملفات صوتية مضافة محليًا.';shelf.innerHTML=clips.map(c=>'<article class="card"><h4 style="word-break:break-word">'+c.name.replace(/[&<>"]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[x]))+'</h4><div class="muted">'+niceSize(c.size)+'</div><audio controls preload="none" style="width:100%;margin-top:12px" src="'+URL.createObjectURL(c.blob)+'"></audio></article>').join('')}
+document.getElementById('audioFiles').addEventListener('change',async e=>{const files=[...e.target.files];try{for(const file of files)await putClip(file);await renderAudioShelf();}catch(err){document.getElementById('audioStatus').textContent='تعذر حفظ الملفات: '+err.message}e.target.value=''});
+document.getElementById('clearAudio').onclick=async()=>{if(!confirm('حذف كل الملفات الصوتية المخزنة محليًا في صَدى؟'))return;await clearClips();renderAudioShelf()};
+openAudioDB().then(x=>{db=x;renderAudioShelf()}).catch(()=>{document.getElementById('audioStatus').textContent='المتصفح لا يسمح بقاعدة الملفات المحلية.'});
 </script></body></html>
