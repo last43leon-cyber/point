@@ -6,14 +6,13 @@
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr)}}@media(max-width:520px){.grid{grid-template-columns:1fr}main{padding-inline:12px}.hero{padding:20px}header{padding:15px}}
 </style></head><body>
 <header><div class="brand"><div class="mark">◈</div><div><h1>صَدى</h1><small>مكتبة ردود الشخصيات • أصوات أصلية</small></div></div><a class="source" href="https://github.com/last43leon-cyber/point" target="_blank" rel="noopener">المصدر المفتوح</a></header>
-<main><section class="hero"><h2>اختر الموقف… ثم اختر الرد.</h2><p>المكتبة مبنية على معنى المحادثة: الكلام الذي قيل لك، ثم الرد المناسب عليه. نربط فقط تسجيلات بشرية أصلية، ونوضح إذا كان التشغيل على المصدر الخارجي حتى لا نوهمك بأن الصوت يعمل داخل صَدى.</p>
+<main><section class="hero"><h2>اختر الموقف… ثم اختر الرد.</h2><p>المكتبة مبنية على معنى المحادثة: الموقف الذي يحدث، ثم الرد المناسب بصوت الشخصية.</p>
 <div class="filters"><input id="q" placeholder="ابحث عن موقف أو رد أو شخصية…"><select id="category"><option value="">كل المواقف</option></select><button id="clear">إعادة ضبط</button></div></section>
 <div class="section"><h3>مواقف شائعة</h3><span id="count" class="muted"></span></div><div id="chips" class="quick"></div><section id="list" class="grid"></section></main>
-<footer>صَدى • الأصوات أصلية من مصادرها العامة. بعض المصادر تفتح في موقعها لأنها لا توفر رابط تشغيل مباشر ثابت يمكن التحقق منه.</footer>
+<footer>صَدى • مكتبة ردود صوتية حسب الموقف. الملفات الصوتية المحلية ستظهر هنا عند توفرها.</footer>
 <script>
 const entries=[
 {trigger:"شكراً",reply:"العفو / لا شكر على واجب",category:"الامتنان",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"Don't mention it.",note:"العبارة موجودة ضمن قائمة أصوات ليون، لكن التشغيل المباشر داخل صَدى غير مثبت."},
-{trigger:"شكراً",reply:"على الرحب والسعة",category:"الامتنان",character:"Leon Kennedy",work:"Resident Evil 4 Ultimate HD",icon:"🧥",url:"https://www.101soundboards.com/sounds/53674371-pl008-0-thank-you",phrase:"Thank you.",note:"هذا تسجيل حقيقي بعنوان Thank you — ليس رد العفو، لذلك لا نعرض عليه معنى غير مطابق."},
 {trigger:"اعتذار: آسف",reply:"حصل خير / لا يهم",category:"الاعتذار",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"Don't talk like that. / Fine.",note:"الصفحة تضم مقاطع ليون، راجع العبارة في المصدر."},
 {trigger:"تحية: هلا / أهلًا",reply:"أهلًا / مرحبًا",category:"التحية",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"Hello. / Hey.",note:"مقاطع التحية مذكورة في أرشيف المصدر."},
 {trigger:"وش؟ / ماذا؟",reply:"ماذا؟ / وش؟",category:"الاستغراب",character:"Leon Kennedy",work:"Resident Evil 2",icon:"🧥",url:"https://www.101soundboards.com/boards/10254-leon-kennedy-sounds-resident-evil-2",phrase:"What? / What was that?",note:"توجد عدة مقاطع What? في المصدر."},
