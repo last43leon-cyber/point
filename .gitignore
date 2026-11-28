@@ -1,0 +1,13 @@
+/node_modules
+/sessions
+/session
+package-lock.json
+/temp/*
+!/temp/.gitkeep
+.env
+database.db
+database.db-wal
+database.db-shm
+cycle_count.json
+temp.txt
+.agents/*

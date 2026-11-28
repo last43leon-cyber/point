@@ -1,0 +1,544 @@
+import { createMessageGuard } from "./src/guards/messageGuard.js";
+/**
+ * Entry Point — WhatsApp Bot
+ *
+ * Responsibilities:
+ *  1. Initialize Baileys connection
+ *  2. Handle connection lifecycle (QR, reconnect, session cleanup)
+ *  3. Route incoming messages and events
+ *  4. Hot-reload handler + commands on file changes
+ */
+
+import fs from "fs";
+import path from "path";
+import {
+  makeWASocket,
+  fetchLatestBaileysVersion,
+  DisconnectReason,
+  useMultiFileAuthState,
+  makeCacheableSignalKeyStore,
+  jidDecode,
+  Browsers,
+  generateMessageIDV2
+} from "baileys";
+import qrcode from "qrcode-terminal";
+import Pino from "pino";
+import chokidar from "chokidar";
+import { Messages } from "./lib/Messages.js";
+import { initCleanup } from "./services/cleanup.js";
+import { reloadCommand, initCommands, commandsDir } from "./commands/_registry.js";
+import { handleGroupParticipantsUpdate } from "./lib/events/group-participants.js";
+import { upsertBotRegistry, getUser, saveUser, banUser } from "./lib/database.js";
+import { resolveTarget } from "./lib/jidHelper.js";
+import setting from "./setting.js";
+import { logger as log } from "./lib/logger.js";
+
+// ── Initialize command registry (must happen after all static imports settle) ─
+await initCommands();
+
+// ── Dynamic handler (supports hot-reload) ───────────────────────────────────
+let { msgHandler } = await import("./handler.js");
+
+// ── Start services ──────────────────────────────────────────────────────────
+initCleanup();
+
+// ── Baileys logger ──────────────────────────────────────────────────────────
+const logger = Pino({ level: "silent" });
+
+// ── Bot Instance Identity ───────────────────────────────────────────────────
+const BOT_ID = setting.botId;
+const TAG = `[${BOT_ID}]`;
+
+const messageGuard = createMessageGuard();
+
+// ── Per-Bot Paths ───────────────────────────────────────────────────────────
+const SESSION_DIR = `./sessions/session_${BOT_ID}`;
+const CYCLE_FILE = `./sessions/cycle_${BOT_ID}.json`;
+
+// Ensure sessions directory exists
+if (!fs.existsSync("./sessions")) fs.mkdirSync("./sessions", { recursive: true });
+
+// ── Connection State ────────────────────────────────────────────────────────
+
+let currentSock = null;          // Active socket reference (for graceful shutdown)
+let registryInterval = null;     // Auto-Discovery Heartbeat
+let reconnectAttempts = 0;       // Retry counter per cycle
+let qrCount = 0;                 // How many times QR was generated without being scanned
+let isSuspended = false;         // Flag to prevent reconnect after suspend
+let pairingCodeRequested = false; // Prevent duplicate pairing requests
+
+const MAX_RECONNECT_ATTEMPTS = 5;
+const MAX_QR_ATTEMPTS = 5;
+
+let cycleCount = 0;
+
+try {
+  if (fs.existsSync(CYCLE_FILE)) {
+    cycleCount = JSON.parse(fs.readFileSync(CYCLE_FILE, "utf-8")).count || 0;
+  }
+} catch (e) {
+  cycleCount = 0;
+}
+
+function saveCycleCount(count) {
+  try {
+    fs.writeFileSync(CYCLE_FILE, JSON.stringify({ count }));
+  } catch (e) {}
+}
+
+const MAX_CYCLES = 3;
+
+/**
+ * Calculate reconnect delay with exponential backoff.
+ * @param {number} attempt    - Attempt number (1-indexed)
+ * @param {boolean} isHard    - true for severe errors (loggedOut/401), false for soft errors
+ * @returns {number} delay in ms
+ */
+function getBackoffDelay(attempt, isHard) {
+  if (isHard) {
+    // loggedOut/401: 5s → 10s → 20s → 40s → 60s (cap)
+    return Math.min(5000 * Math.pow(2, attempt - 1), 60000);
+  }
+  // Soft errors (timedOut, connectionClosed, etc): 3s → 5s → 7s → ... → 30s (cap)
+  return Math.min(3000 + (attempt * 2000), 30000);
+}
+
+/**
+ * Suspend program — keep event loop alive so PM2 doesn't auto-restart.
+ * @param {string} reason - Suspension reason to log
+ */
+function suspendProgram(reason) {
+  isSuspended = true;
+  console.log(`${TAG} | 🛑 SUSPENDED: ${reason}`);
+  console.log(`${TAG} | To resume, run: pm2 restart ${BOT_ID}`);
+  setInterval(() => {}, 1000 * 60 * 60);
+}
+
+// ── Graceful Shutdown ───────────────────────────────────────────────────────
+// Close WebSocket cleanly before the process dies.
+// This PREVENTS false loggedOut errors during PM2 restart.
+
+async function gracefulShutdown(signal) {
+  console.log(`${TAG} | Received ${signal}, shutting down gracefully...`);
+  if (currentSock) {
+    try {
+      currentSock.ev.removeAllListeners();
+      currentSock.ws?.close();
+      currentSock.end?.();
+      console.log(`${TAG} | WebSocket closed cleanly.`);
+    } catch (e) {
+      // Ignore errors during cleanup
+    }
+    currentSock = null;
+  }
+  // Allow 2 seconds for cleanup before exit
+  setTimeout(() => process.exit(0), 2000);
+}
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+
+async function connectToWhatsApp() {
+  if (isSuspended) return;
+
+  // Clean up previous socket to prevent dual-socket session collisions
+  if (currentSock) {
+    try {
+      currentSock.ev.removeAllListeners();
+      currentSock.ws?.close();
+      currentSock.end?.();
+    } catch {
+      // Best-effort cleanup
+    }
+    currentSock = null;
+  }
+
+  const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR);
+  const { version } = await fetchLatestBaileysVersion();
+
+  const sock = makeWASocket({
+    auth: {
+      creds: state.creds,
+      keys: makeCacheableSignalKeyStore(state.keys, logger),
+    },
+    retryRequestDelayMs: 300,
+    maxMsgRetryCount: 10,
+    version,
+    logger,
+    markOnlineOnConnect: true,
+    keepAliveIntervalMs: 10000,
+    connectTimeoutMs: 60000,
+    defaultQueryTimeoutMs: 60000,
+    generateHighQualityLinkPreview: true,
+    browser: Browsers.ubuntu("Chrome"),
+  });
+
+  currentSock = sock;
+
+  const originalSendMessage = sock.sendMessage.bind(sock);
+  sock.sendMessage = async (jid, content, options = {}) => {
+    const messageId = generateMessageIDV2(sock.user?.id || state.creds.me?.id);
+    messageGuard.registerOutgoing(messageId);
+
+    try {
+      return await originalSendMessage(jid, content, {
+        ...options,
+        messageId
+      });
+    } catch (error) {
+      messageGuard.unregisterOutgoing(messageId);
+      throw error;
+    }
+  };
+
+  sock.ev.process(async (ev) => {
+    // ── Connection lifecycle ────────────────────────────────────
+    if (ev["connection.update"]) {
+      handleConnectionUpdate(ev["connection.update"], sock);
+    }
+
+    // ── Credential persistence ─────────────────────────────────
+    if (ev["creds.update"]) {
+      await saveCreds();
+    }
+
+    // ── Incoming messages ──────────────────────────────────────
+    const upsert = ev["messages.upsert"];
+    if (upsert) {
+      handleMessageUpsert(upsert, sock);
+    }
+
+    // ── Call rejection ─────────────────────────────────────────
+    if (ev["call"]) {
+      handleIncomingCall(ev["call"], sock);
+    }
+
+    // ── Group Participants Update ──────────────────────────────
+    if (ev["group-participants.update"]) {
+      handleGroupParticipantsUpdate(ev["group-participants.update"], sock);
+    }
+  });
+}
+
+// ── Event Handlers ──────────────────────────────────────────────────────────
+
+function handleConnectionUpdate(update, sock) {
+  const { connection, lastDisconnect } = update;
+  const status = lastDisconnect?.error?.output?.statusCode;
+
+  // ── QR Code / Pairing Code ──────────────────────────────────
+  if (update.qr) {
+    if (setting.pairingNumber && !pairingCodeRequested) {
+      pairingCodeRequested = true;
+      (async () => {
+        try {
+          // Normalize phone number — strip non-digits, apply country code for local format
+          let number = setting.pairingNumber.replace(/[^0-9]/g, "");
+          if (number.startsWith("0")) {
+            number = setting.defaultCountryCode + number.slice(1);
+          }
+          
+          const code = await sock.requestPairingCode(number);
+          console.log(`\n======================================================`);
+          console.log(`${TAG} | 📱 PAIRING CODE: ${code}`);
+          console.log(`======================================================\n`);
+        } catch (err) {
+          console.error(`${TAG} | ❌ Failed to request Pairing Code:`, err.message);
+        }
+      })();
+    } else if (!setting.pairingNumber) {
+      qrCount++;
+      if (qrCount >= MAX_QR_ATTEMPTS) {
+        return suspendProgram(
+          `QR code generated ${qrCount}x without being scanned. ` +
+          `Run 'pm2 restart ${BOT_ID}' to try again.`
+        );
+      }
+      console.log(`${TAG} | QR Code (${qrCount}/${MAX_QR_ATTEMPTS}):`);
+      qrcode.generate(update.qr, { small: true }, (qr) => console.log(qr));
+    }
+  }
+
+  // ── Connection Close ────────────────────────────────────────
+  if (connection === "close") {
+    const reason = Object.entries(DisconnectReason)
+      .find((i) => i[1] === status)?.[0] || "unknown";
+
+    console.log(`${TAG} | Closed connection, status: ${reason} (${status})`);
+
+    if (lastDisconnect?.error) {
+      console.error(`${TAG} | Error details:`, lastDisconnect.error?.message || lastDisconnect.error);
+    }
+
+    // Clean up current socket listeners immediately on close
+    if (currentSock) {
+      try {
+        currentSock.ev.removeAllListeners();
+        currentSock.ws?.close();
+        currentSock.end?.();
+      } catch {
+        // Best-effort cleanup
+      }
+      currentSock = null;
+    }
+
+    // ── 401 Logged Out: Preserve Session & Suspend ─────────────
+    if (status === 401 || reason === "loggedOut") {
+      console.log(`${TAG} | 🛑 Session logged out (401 / loggedOut). Preserving session files...`);
+      try {
+        if (fs.existsSync(SESSION_DIR)) {
+          // Session files are intentionally preserved for manual recovery.
+          console.log(`${TAG} | Session directory preserved.`);
+        }
+      } catch (err) {
+        console.error(`${TAG} | Failed while checking session directory:`, err.message);
+      }
+      saveCycleCount(0);
+      reconnectAttempts = 0;
+      return suspendProgram(
+        `Session logged out (401). Session files preserved. ` +
+        `Run 'pm2 restart ${BOT_ID}' to scan a new QR code or request Pairing Code.`
+      );
+    }
+
+    // ── Corrupted Session Handling (500 badSession) ────────────
+    if (status === 500 || reason === "badSession") {
+      reconnectAttempts++;
+      if (reconnectAttempts <= 2) {
+        const delay = getBackoffDelay(reconnectAttempts, true);
+        console.log(
+          `${TAG} | ⚠️ Transient session corruption (500 badSession). ` +
+          `Retrying (${reconnectAttempts}/2) in ${delay / 1000}s...`
+        );
+        setTimeout(connectToWhatsApp, delay);
+        return;
+      }
+
+      console.log(`${TAG} | 🛑 Repeated badSession (500). Preserving session files...`);
+      try {
+        if (fs.existsSync(SESSION_DIR)) {
+          // Session files are intentionally preserved for manual recovery.
+          console.log(`${TAG} | Session directory preserved.`);
+        }
+      } catch (err) {
+        console.error(`${TAG} | Failed while checking session directory:`, err.message);
+      }
+      saveCycleCount(0);
+      reconnectAttempts = 0;
+      return suspendProgram(
+        `Session corrupted (badSession 500). Session files preserved. ` +
+        `Run 'pm2 restart ${BOT_ID}' to scan a new QR code or request Pairing Code.`
+      );
+    }
+
+    // Severe errors: multideviceMismatch, 403, 411
+    // Can be transient (network glitch), so still retry.
+    const isHardError =
+      reason === "multideviceMismatch" ||
+      status === 403 ||
+      status === 411;
+
+    if (isHardError) {
+      reconnectAttempts++;
+
+      if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        cycleCount++;
+        saveCycleCount(cycleCount);
+
+        if (cycleCount >= MAX_CYCLES) {
+          // Total failure: preserve session files and suspend for manual review.
+          console.log(`${TAG} | Total failure ${MAX_RECONNECT_ATTEMPTS * MAX_CYCLES}x (${MAX_CYCLES} cycles). Preserving session files...`);
+          try {
+            if (fs.existsSync(SESSION_DIR)) {
+              // Session files are intentionally preserved for manual recovery.
+              console.log(`${TAG} | Session directory preserved.`);
+            }
+          } catch (err) {
+            console.error(`${TAG} | Failed while checking session directory:`, err.message);
+          }
+          saveCycleCount(0);
+          return suspendProgram(
+            "Session files preserved after repeated reconnect failures. " +
+            `Run 'pm2 restart ${BOT_ID}' to scan a new QR code.`
+          );
+        }
+
+        // Cycles remaining — suspend, let user restart manually
+        reconnectAttempts = 0; // Reset for next cycle
+        return suspendProgram(
+          `Session failed after ${MAX_RECONNECT_ATTEMPTS} attempts ` +
+          `(cycle ${cycleCount}/${MAX_CYCLES}). ` +
+          `Run 'pm2 restart ${BOT_ID}' to continue to the next cycle.`
+        );
+      }
+
+      // Retries remaining — try again with exponential backoff
+      const delay = getBackoffDelay(reconnectAttempts, true);
+      console.log(
+        `${TAG} | Session disconnected (${reason}). ` +
+        `Reconnecting (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS}) ` +
+        `cycle ${cycleCount + 1}/${MAX_CYCLES} in ${delay / 1000}s...`
+      );
+      setTimeout(connectToWhatsApp, delay);
+
+    } else {
+      // Soft errors: timedOut, connectionClosed, restartRequired, etc.
+      // Usually safe to retry immediately.
+      reconnectAttempts++;
+      const delay = getBackoffDelay(reconnectAttempts, false);
+      console.log(`${TAG} | Reconnecting in ${delay / 1000}s... (attempt ${reconnectAttempts})`);
+
+      // Safety net: prevent infinite loop on persistent soft errors
+      if (reconnectAttempts >= 10) {
+        reconnectAttempts = 0;
+        return suspendProgram(
+          "Soft errors occurred 10x in a row. " +
+          `Possible VPS network issue. Run 'pm2 restart ${BOT_ID}' to retry.`
+        );
+      }
+      setTimeout(connectToWhatsApp, delay);
+    }
+
+  // ── Connection Open ─────────────────────────────────────────
+  } else if (connection === "open") {
+    // Reset all retry counters
+    reconnectAttempts = 0;
+    qrCount = 0;
+    pairingCodeRequested = false;
+    if (cycleCount > 0) {
+      cycleCount = 0;
+      saveCycleCount(0);
+    }
+    
+    console.log(`${TAG} | ✅ Connected: ${jidDecode(sock?.user?.id)?.user}`);
+    
+    // ── Auto-Discovery Heartbeat ─────────────────────────────
+    if (registryInterval) clearInterval(registryInterval);
+    const myJid = sock.user.id.includes(":") ? sock.user.id.split(":")[0] + "@s.whatsapp.net" : sock.user.id;
+    upsertBotRegistry(BOT_ID, myJid);
+    registryInterval = setInterval(() => {
+        upsertBotRegistry(BOT_ID, myJid);
+    }, 60000);
+  }
+}
+
+function handleMessageUpsert(upsert, sock) {
+  const message = messages(upsert, sock);
+  const decision = messageGuard.evaluateUpsert({
+    upsertType: upsert?.type,
+    message
+  });
+  if (!decision.allow) return;
+
+  // fromMe is allowed so the bot owner can process their own commands
+  msgHandler(upsert, sock, message);
+}
+
+// ── Call Dedup (prevents Baileys from firing multiple events per call) ──────
+const processedCalls = new Map();
+const CALL_DEDUP_TTL = 3600000; // 1 hour
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [id, ts] of processedCalls) {
+    if (now - ts > CALL_DEDUP_TTL) processedCalls.delete(id);
+  }
+}, 600000); // Cleanup every 10 minutes
+
+async function handleIncomingCall(callEvent, sock) {
+  const call = callEvent[0];
+  if (!call) return;
+  
+  const { id, chatId, isGroup, status } = call;
+  if (isGroup) return;
+
+  // Reject call
+  await sock.rejectCall(id, chatId).catch(() => {});
+
+  // Prevent duplicate call events from Baileys (multiple events per single call)
+  // Only process if status is 'offer' or ID hasn't been processed before
+  if (status && status !== "offer") return;
+  
+  if (processedCalls.has(id)) return;
+  processedCalls.set(id, Date.now());
+
+  // Resolve chatId to canonical PN — chatId may be LID in newer addressing modes
+  const { jid: resolvedJid, baseId } = resolveTarget(chatId);
+  const userId = resolvedJid || chatId; // Fallback to raw chatId if resolve fails
+
+  // Exempt owners from ban penalties (call is still rejected above)
+  const normalizeNum = (n) => n.replace(/^\+/, "").replace(/^0/, setting.defaultCountryCode);
+  if (setting.owner.some(num => normalizeNum(num) === baseId)) return;
+
+  // Track warnings and auto-ban
+  const user = getUser(userId);
+  if (user.banned) return; // Already banned — silent drop
+
+  user.meta = user.meta || {};
+  user.meta.callCount = (user.meta.callCount || 0) + 1;
+  saveUser(userId, user);
+
+  if (user.meta.callCount >= 4) {
+    banUser(userId, sock.user.id, "Repeated voice/video call spam");
+    await sock.sendMessage(
+      chatId,
+      { text: "🚫 You have been globally banned for repeatedly calling the bot." }
+    ).catch(() => {});
+  } else {
+    let warningText = `⚠️ This bot does not accept voice/video calls.`;
+    if (user.meta.callCount === 3) {
+      warningText += `\n\n*Final warning!* One more call and you will be globally banned.`;
+    } else {
+      warningText += `\n\n_Warning ${user.meta.callCount}/3. After 3 warnings, automatic global ban._`;
+    }
+    
+    await sock.sendMessage(
+      chatId,
+      { text: warningText }
+    ).catch(() => {});
+  }
+}
+
+// ── Start ───────────────────────────────────────────────────────────────────
+connectToWhatsApp();
+
+// ── Hot-Reload ──────────────────────────────────────────────────────────────
+// Watch handler.js for pipeline changes
+const handlerWatcher = chokidar.watch("./handler.js", {
+  ignored: /(^|[/\\])\../,
+  persistent: true,
+});
+
+let handlerReloadCount = 0;
+
+handlerWatcher.on("change", async (filePath) => {
+  try {
+    const newModule = await import(`./handler.js?cacheBust=${Date.now()}`);
+    msgHandler = newModule.msgHandler;
+    handlerReloadCount++;
+    log.info("HOT-RELOAD", `Handler updated (reload #${handlerReloadCount})`);
+    if (handlerReloadCount >= 20) {
+      log.warn("HOT-RELOAD", `${handlerReloadCount} reloads — consider 'pm2 restart ${BOT_ID}' to reclaim memory.`);
+    }
+  } catch (err) {
+    log.error("HOT-RELOAD", err);
+  }
+});
+
+// Watch commands/ directory for new or changed command files
+const commandWatcher = chokidar.watch(commandsDir, {
+  ignored: /(^|[/\\])(_|\.)/, // ignore dotfiles and files starting with _
+  persistent: true,
+  ignoreInitial: true,        // don't fire for files that already exist on startup
+});
+
+commandWatcher.on("add", async (filePath) => {
+  if (!filePath.endsWith(".js")) return;
+  log.info("HOT-RELOAD", `New command: ${path.basename(filePath)}`);
+  await reloadCommand(filePath);
+});
+
+commandWatcher.on("change", async (filePath) => {
+  if (!filePath.endsWith(".js")) return;
+  await reloadCommand(filePath);
+});
